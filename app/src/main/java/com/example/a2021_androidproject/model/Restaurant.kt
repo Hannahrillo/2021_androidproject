@@ -12,5 +12,5 @@ data class Restaurant(
     @SerializedName("CNTCT_TEL") val call: String,
     @SerializedName("RPRSNTV_MENU") val menu : String,
     @SerializedName("ITEMCNTNTS") val text : String,
-    @SerializedName("MAIN_IMG_NORMAL") val img : String
+    @SerializedName("MAIN_IMG_THUMB") val img : String
 ){}

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.a2021_androidproject.databinding.ItemResBinding
 import com.example.a2021_androidproject.model.Restaurant
 
@@ -14,6 +15,13 @@ class ResAdapter: ListAdapter<Restaurant,ResAdapter.ResItemViewHolder>(diffUtil)
 
         fun bind(ResModel: Restaurant){
             binding.resName.text = ResModel.name
+            binding.resGun.text = ResModel.gun
+            binding.resMenu.text = ResModel.menu
+            Glide
+                .with(binding.resImg.context)
+                .load(ResModel.img)
+                .into(binding.resImg)
+            ResModel.img
         }
     }
 
