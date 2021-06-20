@@ -9,6 +9,11 @@ import com.bumptech.glide.Glide
 import com.example.a2021_androidproject.databinding.ActivityDetailBinding
 import com.example.a2021_androidproject.model.Restaurant
 import com.example.a2021_androidproject.model.Review
+import net.daum.android.map.coord.MapCoordLatLng
+import net.daum.mf.map.api.MapCurrentLocationMarker
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 
 class DetailActivity :AppCompatActivity(){
 
@@ -26,9 +31,22 @@ class DetailActivity :AppCompatActivity(){
             "ResSearchDB"
         ).build()
 
+
+
         val model = intent.getParcelableExtra<Restaurant>("ResModel")
         binding.nameTextview.text = model?.name.orEmpty()
         binding.descTextview.text = model?.text.orEmpty()
+
+        val latitude = model?.lat
+        val longitude = model?.lng
+
+
+       // val marker = MapPOIItem()
+        //val mapView = MapView(this)
+        //if(latitude!=null && longitude!= null)
+        // mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude,longitude),true)
+        //mapView.addPOIItem(marker)
+
 
         Glide.with(binding.imgImgview.context)
             .load(model?.img.orEmpty())
@@ -56,6 +74,9 @@ class DetailActivity :AppCompatActivity(){
             val myIntent = Intent(Intent.ACTION_DIAL, myUri)
             startActivity(myIntent)
         }
+
+
+
 
     }
 }
