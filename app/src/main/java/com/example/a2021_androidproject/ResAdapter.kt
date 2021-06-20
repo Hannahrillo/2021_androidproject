@@ -10,13 +10,18 @@ import com.example.a2021_androidproject.databinding.ItemResBinding
 import com.example.a2021_androidproject.model.Restaurant
 
 
-class ResAdapter: ListAdapter<Restaurant,ResAdapter.ResItemViewHolder>(diffUtil) {
+class ResAdapter(private val itemClickedListner : (Restaurant)->Unit): ListAdapter<Restaurant,ResAdapter.ResItemViewHolder>(diffUtil) {
     inner class ResItemViewHolder(private val binding : ItemResBinding):RecyclerView.ViewHolder(binding.root){
 
         fun bind(ResModel: Restaurant){
             binding.resName.text = ResModel.name
             binding.resGun.text = ResModel.gun
             binding.resMenu.text = ResModel.menu
+
+            binding.root.setOnClickListener{
+                itemClickedListner(ResModel)
+            }
+
             Glide
                 .with(binding.resImg.context)
                 .load(ResModel.img)

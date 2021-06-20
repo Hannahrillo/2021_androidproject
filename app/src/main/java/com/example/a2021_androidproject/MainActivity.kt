@@ -1,5 +1,6 @@
 package com.example.a2021_androidproject
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         initResRecyclerView()
         initHistoryRecyclerView()
+        initSearchEditText()
 
         db = Room.databaseBuilder(
             applicationContext,
@@ -113,7 +115,11 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun initResRecyclerView(){
-        adapter = ResAdapter()
+        adapter = ResAdapter(itemClickedListner = {
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("ResModel", it)
+            startActivity(intent)
+        })
         binding.resRecyclerview.layoutManager = LinearLayoutManager(this)
         binding.resRecyclerview.adapter = adapter
     }
