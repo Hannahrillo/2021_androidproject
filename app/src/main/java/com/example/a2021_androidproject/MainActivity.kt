@@ -3,6 +3,9 @@ package com.example.a2021_androidproject
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.MotionEvent
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.a2021_androidproject.API.ResAPI
 import com.example.a2021_androidproject.databinding.ActivityMainBinding
@@ -16,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     val restList:List<Restaurant> = mutableListOf()
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ResAdapter
+    private lateinit var ResService : ResAPI
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +35,12 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val ResService = retrofit.create(ResAPI::class.java)
+        ResService = retrofit.create(ResAPI::class.java)
         val jsonObject = JSONObject()
 
 
         ResService.getResName(
-            "PcyPpWSaq3yG3%2BInouSgio9lR1uLPQhVJ4PcIEkgxbgoV%2FAVW7%2F1oKrJl%2BMjSigZdGr60meGPllUGeAOb3U0mA%3D%3D",
+            getString(R.string.resAPIKey),
             10,
             1
         )
@@ -50,9 +55,7 @@ class MainActivity : AppCompatActivity() {
                     Log.e(TAG, response.toString())
 
                     response.body()?.let {
-                        Log.d(TAG, it.toString())
                         it.restaurants.forEach{ restaurant ->
-                            Log.d(TAG, restaurant.toString() )
                             restList.toMutableList().add(restaurant)
                         }
                         adapter.submitList(it.restaurants)
@@ -68,9 +71,40 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
+
+        binding.searchEditText.setOnKeyListener{v,keyCode, event->
+            if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == MotionEvent.ACTION_DOWN){
+                Log.e(TAG,"검색버튼 누름")
+                search(binding.searchEditText.text.toString())
+                return@setOnKeyListener true
+            }
+
+            return@setOnKeyListener false
+
+        }
     }
 
-    fun initResRecyclerView(){
+    private fun search(keyword :String){
+        ResService.searchRes(keyword)
+            .enqueue( object : Callback<ResDTO> {
+                //성공.
+                override fun onResponse(call: Call<ResDTO>, response: Response<ResDTO>) {
+                    if (response.isSuccessful.not()) {
+                        Log.e(TAG, "NOT Sucess")
+                        return
+                    }
+                    adapter.submitList(response.body()?.restaurants.orEmpty())
+                    Log.d(TAG,"sucess asdf")
+                }
+
+                override fun onFailure(call: Call<ResDTO>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+            })
+    }
+
+
+    private fun initResRecyclerView(){
         adapter = ResAdapter()
         binding.resRecyclerview.layoutManager = LinearLayoutManager(this)
         binding.resRecyclerview.adapter = adapter

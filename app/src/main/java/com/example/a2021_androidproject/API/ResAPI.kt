@@ -12,4 +12,9 @@ interface ResAPI {
         @Query("numOfRows") numOfRows : Int,
         @Query("pageNo") pageNo : Int
     ): Call<ResDTO>
+
+    @GET("data/search")
+    fun searchRes(
+        @Query("keyword") keyword : String
+    ): Call<ResDTO>
 }

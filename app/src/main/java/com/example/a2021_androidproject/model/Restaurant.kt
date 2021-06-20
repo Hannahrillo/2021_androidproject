@@ -1,5 +1,6 @@
 package com.example.a2021_androidproject.model
 
+import android.widget.EditText
 import com.google.gson.annotations.SerializedName
 //파싱된 결과를 저장할 데이터 클래스.
 data class Restaurant(
