@@ -1,8 +1,10 @@
 package com.example.a2021_androidproject
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -19,6 +21,7 @@ import com.example.a2021_androidproject.model.Restaurant
 import org.json.JSONObject
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
     val restList:List<Restaurant> = mutableListOf()
@@ -90,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         //initSearchEditText()
 
     }
+
 
     private fun search(keyword :String){
         ResService.searchRes(keyword)
