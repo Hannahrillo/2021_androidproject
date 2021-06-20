@@ -1,5 +1,7 @@
 package com.example.a2021_androidproject
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
@@ -46,6 +48,13 @@ class DetailActivity :AppCompatActivity(){
                     binding.reviewEdittext.text.toString())
                 )
             }.start()
+        }
+
+        binding.phoneBtn.setOnClickListener{
+            val callnum = model?.call.toString()
+            val myUri = Uri.parse("tel:${callnum}")
+            val myIntent = Intent(Intent.ACTION_DIAL, myUri)
+            startActivity(myIntent)
         }
 
     }
