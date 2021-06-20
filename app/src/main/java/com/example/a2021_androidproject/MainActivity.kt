@@ -6,9 +6,13 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.widget.Button
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.example.a2021_androidproject.API.ResAPI
+import com.example.a2021_androidproject.Adapter.HistoryAdapter
 import com.example.a2021_androidproject.databinding.ActivityMainBinding
+import com.example.a2021_androidproject.model.History
 import com.example.a2021_androidproject.model.ResDTO
 import com.example.a2021_androidproject.model.Restaurant
 import org.json.JSONObject
@@ -19,7 +23,10 @@ class MainActivity : AppCompatActivity() {
     val restList:List<Restaurant> = mutableListOf()
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ResAdapter
+    private lateinit var historyAdaper : HistoryAdapter
     private lateinit var ResService : ResAPI
+
+    private lateinit var db :AppDataBase
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +36,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initResRecyclerView()
+        initHistoryRecyclerView()
+
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDataBase::class.java,
+            "ResSearchDB"
+        ).build()
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://androidguzo.herokuapp.com/")
@@ -71,7 +85,49 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
+        //initSearchEditText()
 
+    }
+
+    private fun search(keyword :String){
+        ResService.searchRes(keyword)
+            .enqueue( object : Callback<ResDTO> {
+                //성공.
+                override fun onResponse(call: Call<ResDTO>, response: Response<ResDTO>) {
+                    hideHistoryView()
+                    saveSearchKeyword(keyword)
+
+                    if (response.isSuccessful.not()) {
+                        Log.e(TAG, "NOT Sucess")
+                        return
+                    }
+                    adapter.submitList(response.body()?.restaurants.orEmpty())
+                    Log.d(TAG,"sucess asdf")
+                }
+
+                override fun onFailure(call: Call<ResDTO>, t: Throwable) {
+                    hideHistoryView()
+                }
+            })
+    }
+
+
+    private fun initResRecyclerView(){
+        adapter = ResAdapter()
+        binding.resRecyclerview.layoutManager = LinearLayoutManager(this)
+        binding.resRecyclerview.adapter = adapter
+    }
+
+    private fun initHistoryRecyclerView(){
+        historyAdaper = HistoryAdapter(historyDelectClickedListner  ={
+            deleteSearchKeyword(it)
+        })
+        binding.historyRecyclerview.layoutManager=LinearLayoutManager(this)
+        binding.historyRecyclerview.adapter=historyAdaper
+        initSearchEditText()
+    }
+
+    private fun initSearchEditText(){
         binding.searchEditText.setOnKeyListener{v,keyCode, event->
             if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == MotionEvent.ACTION_DOWN){
                 Log.e(TAG,"검색버튼 누름")
@@ -82,32 +138,42 @@ class MainActivity : AppCompatActivity() {
             return@setOnKeyListener false
 
         }
+        binding.searchEditText.setOnTouchListener { v, event ->
+            if(event.action == MotionEvent.ACTION_DOWN){
+                showHistoryView()
+            }
+            return@setOnTouchListener false
+        }
     }
 
-    private fun search(keyword :String){
-        ResService.searchRes(keyword)
-            .enqueue( object : Callback<ResDTO> {
-                //성공.
-                override fun onResponse(call: Call<ResDTO>, response: Response<ResDTO>) {
-                    if (response.isSuccessful.not()) {
-                        Log.e(TAG, "NOT Sucess")
-                        return
-                    }
-                    adapter.submitList(response.body()?.restaurants.orEmpty())
-                    Log.d(TAG,"sucess asdf")
-                }
+    private fun showHistoryView(){
+        Thread{
+            val keywords = db.historyDao().getAll().reversed()
 
-                override fun onFailure(call: Call<ResDTO>, t: Throwable) {
-                    TODO("Not yet implemented")
-                }
-            })
+            runOnUiThread{
+                binding.historyRecyclerview.isVisible = true
+                historyAdaper.submitList(keywords.orEmpty())
+            }
+
+        }.start()
+        binding.historyRecyclerview.isVisible =true
     }
 
+    private fun hideHistoryView(){
+        binding.historyRecyclerview.isVisible = false
+    }
 
-    private fun initResRecyclerView(){
-        adapter = ResAdapter()
-        binding.resRecyclerview.layoutManager = LinearLayoutManager(this)
-        binding.resRecyclerview.adapter = adapter
+    private fun saveSearchKeyword(keyword: String){
+        Thread{
+            db.historyDao().insertHistory(History(null, keyword))
+        }.start()
+    }
+
+    private fun deleteSearchKeyword(keyword: String){
+        Thread{
+            db.historyDao().delete(keyword)
+            showHistoryView()
+        }.start()
     }
 
     companion object{
