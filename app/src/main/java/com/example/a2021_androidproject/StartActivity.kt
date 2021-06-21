@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import com.example.a2021_androidproject.Calendar.CalendarActivity
+
 import com.example.a2021_androidproject.bmi.BMIMainActivity
 import com.example.a2021_androidproject.bmi.BMIResultActivity
 import java.util.*
