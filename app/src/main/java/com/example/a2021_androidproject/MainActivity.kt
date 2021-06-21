@@ -8,12 +8,15 @@ import android.util.Base64
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Button
+import android.widget.RelativeLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.a2021_androidproject.API.ResAPI
 import com.example.a2021_androidproject.Adapter.HistoryAdapter
+import com.example.a2021_androidproject.Adapter.MainFragmentStatePagerAdapter
 import com.example.a2021_androidproject.databinding.ActivityMainBinding
 import com.example.a2021_androidproject.model.History
 import com.example.a2021_androidproject.model.ResDTO
@@ -39,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        configureBottomNavigation()
         initResRecyclerView()
         initHistoryRecyclerView()
         initSearchEditText()
@@ -185,8 +189,9 @@ class MainActivity : AppCompatActivity() {
             showHistoryView()
         }.start()
     }
-
-
+    //네비게이션바
+    private fun configureBottomNavigation(){
+    }
 
     companion object{
         private const val TAG = "MainActivity"
