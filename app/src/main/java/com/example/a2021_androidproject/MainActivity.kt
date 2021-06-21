@@ -1,30 +1,27 @@
 package com.example.a2021_androidproject
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.KeyEvent
-import android.view.MenuItem
 import android.view.MotionEvent
-import android.view.View
-import android.widget.RelativeLayout
-import android.widget.Toolbar
+import android.widget.Button
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.a2021_androidproject.API.ResAPI
 import com.example.a2021_androidproject.Adapter.HistoryAdapter
 import com.example.a2021_androidproject.databinding.ActivityMainBinding
-
 import com.example.a2021_androidproject.model.History
 import com.example.a2021_androidproject.model.ResDTO
 import com.example.a2021_androidproject.model.Restaurant
 import org.json.JSONObject
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
-
+import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
     val restList:List<Restaurant> = mutableListOf()
@@ -42,58 +39,57 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-
         initResRecyclerView()
         initHistoryRecyclerView()
         initSearchEditText()
 
         db = Room.databaseBuilder(
-            applicationContext,
-            AppDataBase::class.java,
-            "ResSearchDB"
+                applicationContext,
+                AppDataBase::class.java,
+                "ResSearchDB"
         ).build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://androidguzo.herokuapp.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+                .baseUrl("https://androidguzo.herokuapp.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
         ResService = retrofit.create(ResAPI::class.java)
         val jsonObject = JSONObject()
 
 
         ResService.getResName(
-            getString(R.string.resAPIKey),
-            10,
-            1
+                getString(R.string.resAPIKey),
+                10,
+                1
         )
-            .enqueue(object: Callback<ResDTO> {
-                //성공.
-                override fun onResponse(call: Call<ResDTO>, response: Response<ResDTO>) {
-                    if (response.isSuccessful.not()) {
-                        Log.e(TAG, "NOT Sucess")
-                        return
-                    }
-                    Log.e(TAG, "Sucess")
-                    Log.e(TAG, response.toString())
-
-                    response.body()?.let {
-                        it.restaurants.forEach{ restaurant ->
-                            restList.toMutableList().add(restaurant)
+                .enqueue(object: Callback<ResDTO> {
+                    //성공.
+                    override fun onResponse(call: Call<ResDTO>, response: Response<ResDTO>) {
+                        if (response.isSuccessful.not()) {
+                            Log.e(TAG, "NOT Sucess")
+                            return
                         }
-                        adapter.submitList(it.restaurants)
+                        Log.e(TAG, "Sucess")
+                        Log.e(TAG, response.toString())
+
+                        response.body()?.let {
+                            it.restaurants.forEach{ restaurant ->
+                                restList.toMutableList().add(restaurant)
+                            }
+                            adapter.submitList(it.restaurants)
+
+                        }
 
                     }
 
-                }
+                    //실패처리.
+                    override fun onFailure(call: Call<ResDTO>, t: Throwable) {
+                        Log.e(TAG, t.toString() )
+                        Log.e(TAG, "실패" )
+                    }
 
-                //실패처리.
-                override fun onFailure(call: Call<ResDTO>, t: Throwable) {
-                    Log.e(TAG, t.toString() )
-                    Log.e(TAG, "실패" )
-                }
-
-            })
+                })
         //initSearchEditText()
 
     }
@@ -101,24 +97,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun search(keyword :String){
         ResService.searchRes(keyword)
-            .enqueue( object : Callback<ResDTO> {
-                //성공.
-                override fun onResponse(call: Call<ResDTO>, response: Response<ResDTO>) {
-                    hideHistoryView()
-                    saveSearchKeyword(keyword)
+                .enqueue( object : Callback<ResDTO> {
+                    //성공.
+                    override fun onResponse(call: Call<ResDTO>, response: Response<ResDTO>) {
+                        hideHistoryView()
+                        saveSearchKeyword(keyword)
 
-                    if (response.isSuccessful.not()) {
-                        Log.e(TAG, "NOT Sucess")
-                        return
+                        if (response.isSuccessful.not()) {
+                            Log.e(TAG, "NOT Sucess")
+                            return
+                        }
+                        adapter.submitList(response.body()?.restaurants.orEmpty())
+                        Log.d(TAG,"sucess asdf")
                     }
-                    adapter.submitList(response.body()?.restaurants.orEmpty())
-                    Log.d(TAG,"sucess asdf")
-                }
 
-                override fun onFailure(call: Call<ResDTO>, t: Throwable) {
-                    hideHistoryView()
-                }
-            })
+                    override fun onFailure(call: Call<ResDTO>, t: Throwable) {
+                        hideHistoryView()
+                    }
+                })
     }
 
 
@@ -189,8 +185,6 @@ class MainActivity : AppCompatActivity() {
             showHistoryView()
         }.start()
     }
-
-
 
 
 

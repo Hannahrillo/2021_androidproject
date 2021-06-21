@@ -41,7 +41,7 @@ class DetailActivity :AppCompatActivity(){
         val longitude = model?.lng
 
 
-       // val marker = MapPOIItem()
+        // val marker = MapPOIItem()
         //val mapView = MapView(this)
         //if(latitude!=null && longitude!= null)
         // mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude,longitude),true)
@@ -63,7 +63,7 @@ class DetailActivity :AppCompatActivity(){
             Thread{
                 db.reviewDao().saveReview(
                     Review(model?.id?.toInt()?:0,
-                    binding.reviewEdittext.text.toString())
+                        binding.reviewEdittext.text.toString())
                 )
             }.start()
         }
