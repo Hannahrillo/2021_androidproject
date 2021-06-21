@@ -1,30 +1,30 @@
 package com.example.a2021_androidproject
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
 import android.widget.RelativeLayout
+import android.widget.Toolbar
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.a2021_androidproject.API.ResAPI
 import com.example.a2021_androidproject.Adapter.HistoryAdapter
-import com.example.a2021_androidproject.Adapter.MainFragmentStatePagerAdapter
 import com.example.a2021_androidproject.databinding.ActivityMainBinding
+
 import com.example.a2021_androidproject.model.History
 import com.example.a2021_androidproject.model.ResDTO
 import com.example.a2021_androidproject.model.Restaurant
 import org.json.JSONObject
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
-import java.security.MessageDigest
+
 
 class MainActivity : AppCompatActivity() {
     val restList:List<Restaurant> = mutableListOf()
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        configureBottomNavigation()
+
         initResRecyclerView()
         initHistoryRecyclerView()
         initSearchEditText()
@@ -189,9 +189,10 @@ class MainActivity : AppCompatActivity() {
             showHistoryView()
         }.start()
     }
-    //네비게이션바
-    private fun configureBottomNavigation(){
-    }
+
+
+
+
 
     companion object{
         private const val TAG = "MainActivity"
