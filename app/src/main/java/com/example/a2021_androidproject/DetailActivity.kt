@@ -42,27 +42,23 @@ class DetailActivity :AppCompatActivity(){
 
 
         //var container = document.getElementById(R.id.map_view)
-        var options = {
-            MapPoint.GeoCoordinate(latitude,longitude)
-        }
+        //var options = {
+        //    MapPoint.GeoCoordinate(latitude,longitude)
+        //}
         val mapP = MapPoint.mapPointWithGeoCoord(latitude,longitude)
-        var marker = MapPOIItem()
+        val marker = MapPOIItem()
         marker.mapPoint = mapP
         marker.markerType = MapPOIItem.MarkerType.BluePin
+        marker.itemName = model!!.name
+        marker.isShowCalloutBalloonOnTouch=false
         binding.mapView.setMapCenterPoint(mapP,true)
         binding.mapView.addPOIItem(marker)
 
 
 
+
         var gotokakao :String = "https://map.kakao.com/link/map/"+latitude.toString()+longitude.toString()
 
-
-
-        // val marker = MapPOIItem()
-        //val mapView = MapView(this)
-        //if(latitude!=null && longitude!= null)
-        //mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude,longitude),true)
-        //mapView.addPOIItem(marker)
 
 
         Glide.with(binding.imgImgview.context)
