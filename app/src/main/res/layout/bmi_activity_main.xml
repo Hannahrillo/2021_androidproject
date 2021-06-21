@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    tools:context=".MainActivity">
+
+
+
+    <TextView
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/height"
+        android:layout_marginTop="30dp"
+        tools:layout_editor_absoluteX="63dp"
+        tools:layout_editor_absoluteY="36dp" />
+
+
+    <EditText
+        android:id="@+id/key_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:inputType="number"/>
+
+    <TextView
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/weight"
+        tools:layout_editor_absoluteX="101dp"
+        tools:layout_editor_absoluteY="200dp" />
+
+    <EditText
+        android:id="@+id/mugey_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/result_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+
+        android:text="결과보기"
+
+        android:textStyle="italic"
+        tools:layout_editor_absoluteX="109dp"
+        tools:layout_editor_absoluteY="269dp" />
+
+</LinearLayout>
