@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import com.example.a2021_androidproject.Calendar.CalendarActivity
 import com.example.a2021_androidproject.bmi.BMIMainActivity
 import com.example.a2021_androidproject.bmi.BMIResultActivity
 import java.util.*
@@ -19,7 +20,7 @@ class StartActivity: AppCompatActivity() {
 
         //달력버튼//
         val button1:ImageButton = findViewById(R.id.calendar_btn)
-        val intent1 = Intent(this, Calendar::class.java)
+        val intent1 = Intent(this, CalendarActivity::class.java)
 
         button1.setOnClickListener{
                     startActivity(intent1)

@@ -17,7 +17,7 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/height"
+        android:text="@string/heightinput"
         android:layout_marginTop="30dp"
         tools:layout_editor_absoluteX="63dp"
         tools:layout_editor_absoluteY="36dp" />
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="@string/weight"
+        android:text="@string/weightinput"
         tools:layout_editor_absoluteX="101dp"
         tools:layout_editor_absoluteY="200dp" />
 

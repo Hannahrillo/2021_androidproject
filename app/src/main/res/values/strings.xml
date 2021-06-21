@@ -4,4 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="weight" />
     <string name="height" />
+    <string name="heightinput">키를 입력하세요.</string>
+    <string name="weightinput">몸무게를 입력하세요.</string>
+    <string name="title">식단일기</string>
 </resources>
