@@ -37,14 +37,31 @@ class DetailActivity :AppCompatActivity(){
         binding.nameTextview.text = model?.name.orEmpty()
         binding.descTextview.text = model?.text.orEmpty()
 
-        val latitude = model?.lat
-        val longitude = model?.lng
+        val latitude = model!!.lat
+        val longitude = model!!.lng
+
+
+        //var container = document.getElementById(R.id.map_view)
+        var options = {
+            MapPoint.GeoCoordinate(latitude,longitude)
+        }
+        val mapP = MapPoint.mapPointWithGeoCoord(latitude,longitude)
+        var marker = MapPOIItem()
+        marker.mapPoint = mapP
+        marker.markerType = MapPOIItem.MarkerType.BluePin
+        binding.mapView.setMapCenterPoint(mapP,true)
+        binding.mapView.addPOIItem(marker)
+
+
+
+        var gotokakao :String = "https://map.kakao.com/link/map/"+latitude.toString()+longitude.toString()
+
 
 
         // val marker = MapPOIItem()
         //val mapView = MapView(this)
         //if(latitude!=null && longitude!= null)
-        // mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude,longitude),true)
+        //mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude,longitude),true)
         //mapView.addPOIItem(marker)
 
 
@@ -73,6 +90,11 @@ class DetailActivity :AppCompatActivity(){
             val myUri = Uri.parse("tel:${callnum}")
             val myIntent = Intent(Intent.ACTION_DIAL, myUri)
             startActivity(myIntent)
+        }
+
+        binding.mapBtn.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(gotokakao))
+            startActivity(intent)
         }
 
 
