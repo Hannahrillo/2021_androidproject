@@ -57,7 +57,7 @@ class DetailActivity :AppCompatActivity(){
 
 
 
-        var gotokakao :String = "https://map.kakao.com/link/map/"+latitude.toString()+longitude.toString()
+        val gotokakao :String = "https://map.kakao.com/link/map/"+latitude.toString()+longitude.toString()
 
 
 
